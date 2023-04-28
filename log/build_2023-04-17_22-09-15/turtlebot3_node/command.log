@@ -1,0 +1,6 @@
+Invoking command in '/home/jw/jw/dgtr_ws/build/turtlebot3_node': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake /home/jw/jw/dgtr_ws/src/turtlebot3/turtlebot3_node -DAMENT_CMAKE_SYMLINK_INSTALL=1 -DCMAKE_INSTALL_PREFIX=/home/jw/jw/dgtr_ws/install/turtlebot3_node
+Invoked command in '/home/jw/jw/dgtr_ws/build/turtlebot3_node' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake /home/jw/jw/dgtr_ws/src/turtlebot3/turtlebot3_node -DAMENT_CMAKE_SYMLINK_INSTALL=1 -DCMAKE_INSTALL_PREFIX=/home/jw/jw/dgtr_ws/install/turtlebot3_node
+Invoking command in '/home/jw/jw/dgtr_ws/build/turtlebot3_node': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/jw/jw/dgtr_ws/build/turtlebot3_node -- -j8 -l8
+Invoked command in '/home/jw/jw/dgtr_ws/build/turtlebot3_node' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/jw/jw/dgtr_ws/build/turtlebot3_node -- -j8 -l8
+Invoking command in '/home/jw/jw/dgtr_ws/build/turtlebot3_node': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --install /home/jw/jw/dgtr_ws/build/turtlebot3_node
+Invoked command in '/home/jw/jw/dgtr_ws/build/turtlebot3_node' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --install /home/jw/jw/dgtr_ws/build/turtlebot3_node

@@ -1,0 +1,28 @@
+[0.689s] Invoking command in '/home/jw/jw/dgtr_ws/build/turtlebot3_example': PYTHONPATH=/home/jw/jw/dgtr_ws/build/turtlebot3_example/prefix_override:/home/jw/jw/dgtr_ws/install/turtlebot3_example/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 setup.py develop --editable --build-directory /home/jw/jw/dgtr_ws/build/turtlebot3_example/build --no-deps install_data
+[0.851s] running develop
+[0.852s] /usr/lib/python3/dist-packages/setuptools/command/easy_install.py:158: EasyInstallDeprecationWarning: easy_install command is deprecated. Use build and pip and other standards-based tools.
+[0.852s]   warnings.warn(
+[0.852s] /usr/lib/python3/dist-packages/setuptools/command/install.py:34: SetuptoolsDeprecationWarning: setup.py install is deprecated. Use build and pip and other standards-based tools.
+[0.852s]   warnings.warn(
+[0.888s] /usr/lib/python3/dist-packages/pkg_resources/__init__.py:116: PkgResourcesDeprecationWarning: 0.1.43ubuntu1 is an invalid version and will not be supported in a future release
+[0.888s]   warnings.warn(
+[0.888s] /usr/lib/python3/dist-packages/pkg_resources/__init__.py:116: PkgResourcesDeprecationWarning: 1.1build1 is an invalid version and will not be supported in a future release
+[0.888s]   warnings.warn(
+[0.953s] running egg_info
+[0.953s] writing turtlebot3_example.egg-info/PKG-INFO
+[0.953s] writing dependency_links to turtlebot3_example.egg-info/dependency_links.txt
+[0.953s] writing entry points to turtlebot3_example.egg-info/entry_points.txt
+[0.953s] writing requirements to turtlebot3_example.egg-info/requires.txt
+[0.953s] writing top-level names to turtlebot3_example.egg-info/top_level.txt
+[0.955s] reading manifest file 'turtlebot3_example.egg-info/SOURCES.txt'
+[0.955s] writing manifest file 'turtlebot3_example.egg-info/SOURCES.txt'
+[0.956s] running build_ext
+[0.956s] Creating /home/jw/jw/dgtr_ws/install/turtlebot3_example/lib/python3.10/site-packages/turtlebot3-example.egg-link (link to .)
+[0.957s] Installing turtlebot3_obstacle_detection script to /home/jw/jw/dgtr_ws/install/turtlebot3_example/lib/turtlebot3_example
+[0.957s] Installing turtlebot3_patrol_client script to /home/jw/jw/dgtr_ws/install/turtlebot3_example/lib/turtlebot3_example
+[0.957s] Installing turtlebot3_patrol_server script to /home/jw/jw/dgtr_ws/install/turtlebot3_example/lib/turtlebot3_example
+[0.957s] Installing turtlebot3_position_control script to /home/jw/jw/dgtr_ws/install/turtlebot3_example/lib/turtlebot3_example
+[0.957s] 
+[0.957s] Installed /home/jw/jw/dgtr_ws/build/turtlebot3_example
+[0.957s] running install_data
+[0.979s] Invoked command in '/home/jw/jw/dgtr_ws/build/turtlebot3_example' returned '0': PYTHONPATH=/home/jw/jw/dgtr_ws/build/turtlebot3_example/prefix_override:/home/jw/jw/dgtr_ws/install/turtlebot3_example/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 setup.py develop --editable --build-directory /home/jw/jw/dgtr_ws/build/turtlebot3_example/build --no-deps install_data

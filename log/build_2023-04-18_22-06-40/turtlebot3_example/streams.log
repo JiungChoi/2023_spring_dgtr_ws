@@ -1,0 +1,20 @@
+[1.249s] Invoking command in '/home/jw/jw/dgtr_ws/build/turtlebot3_example': PYTHONPATH=/home/jw/jw/dgtr_ws/build/turtlebot3_example/prefix_override:/home/jw/jw/dgtr_ws/install/turtlebot3_example/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 setup.py develop --editable --build-directory /home/jw/jw/dgtr_ws/build/turtlebot3_example/build --no-deps install_data
+[1.570s] running develop
+[1.755s] running egg_info
+[1.755s] writing turtlebot3_example.egg-info/PKG-INFO
+[1.756s] writing dependency_links to turtlebot3_example.egg-info/dependency_links.txt
+[1.756s] writing entry points to turtlebot3_example.egg-info/entry_points.txt
+[1.756s] writing requirements to turtlebot3_example.egg-info/requires.txt
+[1.756s] writing top-level names to turtlebot3_example.egg-info/top_level.txt
+[1.759s] reading manifest file 'turtlebot3_example.egg-info/SOURCES.txt'
+[1.760s] writing manifest file 'turtlebot3_example.egg-info/SOURCES.txt'
+[1.761s] running build_ext
+[1.761s] Creating /home/jw/jw/dgtr_ws/install/turtlebot3_example/lib/python3.10/site-packages/turtlebot3-example.egg-link (link to .)
+[1.763s] Installing turtlebot3_obstacle_detection script to /home/jw/jw/dgtr_ws/install/turtlebot3_example/lib/turtlebot3_example
+[1.763s] Installing turtlebot3_patrol_client script to /home/jw/jw/dgtr_ws/install/turtlebot3_example/lib/turtlebot3_example
+[1.763s] Installing turtlebot3_patrol_server script to /home/jw/jw/dgtr_ws/install/turtlebot3_example/lib/turtlebot3_example
+[1.763s] Installing turtlebot3_position_control script to /home/jw/jw/dgtr_ws/install/turtlebot3_example/lib/turtlebot3_example
+[1.764s] 
+[1.764s] Installed /home/jw/jw/dgtr_ws/build/turtlebot3_example
+[1.764s] running install_data
+[1.813s] Invoked command in '/home/jw/jw/dgtr_ws/build/turtlebot3_example' returned '0': PYTHONPATH=/home/jw/jw/dgtr_ws/build/turtlebot3_example/prefix_override:/home/jw/jw/dgtr_ws/install/turtlebot3_example/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 setup.py develop --editable --build-directory /home/jw/jw/dgtr_ws/build/turtlebot3_example/build --no-deps install_data
