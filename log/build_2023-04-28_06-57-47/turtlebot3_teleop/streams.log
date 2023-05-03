@@ -1,0 +1,17 @@
+[2.103s] Invoking command in '/home/jw/jw/dgtr_ws/build/turtlebot3_teleop': PYTHONPATH=/home/jw/jw/dgtr_ws/build/turtlebot3_teleop/prefix_override:/home/jw/jw/dgtr_ws/install/turtlebot3_teleop/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 setup.py develop --editable --build-directory /home/jw/jw/dgtr_ws/build/turtlebot3_teleop/build --no-deps install_data
+[2.839s] running develop
+[3.273s] running egg_info
+[3.273s] writing turtlebot3_teleop.egg-info/PKG-INFO
+[3.273s] writing dependency_links to turtlebot3_teleop.egg-info/dependency_links.txt
+[3.273s] writing entry points to turtlebot3_teleop.egg-info/entry_points.txt
+[3.273s] writing requirements to turtlebot3_teleop.egg-info/requires.txt
+[3.283s] writing top-level names to turtlebot3_teleop.egg-info/top_level.txt
+[3.286s] reading manifest file 'turtlebot3_teleop.egg-info/SOURCES.txt'
+[3.300s] writing manifest file 'turtlebot3_teleop.egg-info/SOURCES.txt'
+[3.301s] running build_ext
+[3.302s] Creating /home/jw/jw/dgtr_ws/install/turtlebot3_teleop/lib/python3.10/site-packages/turtlebot3-teleop.egg-link (link to .)
+[3.304s] Installing teleop_keyboard script to /home/jw/jw/dgtr_ws/install/turtlebot3_teleop/lib/turtlebot3_teleop
+[3.304s] 
+[3.304s] Installed /home/jw/jw/dgtr_ws/build/turtlebot3_teleop
+[3.304s] running install_data
+[3.371s] Invoked command in '/home/jw/jw/dgtr_ws/build/turtlebot3_teleop' returned '0': PYTHONPATH=/home/jw/jw/dgtr_ws/build/turtlebot3_teleop/prefix_override:/home/jw/jw/dgtr_ws/install/turtlebot3_teleop/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 setup.py develop --editable --build-directory /home/jw/jw/dgtr_ws/build/turtlebot3_teleop/build --no-deps install_data

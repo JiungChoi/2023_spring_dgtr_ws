@@ -58,6 +58,7 @@
 /home/jw/jw/dgtr_ws/install/turtlebot3_gazebo/share/turtlebot3_gazebo//urdf/turtlebot3_waffle_pi.urdf
 /home/jw/jw/dgtr_ws/install/turtlebot3_gazebo/share/turtlebot3_gazebo//worlds/custom_house.world
 /home/jw/jw/dgtr_ws/install/turtlebot3_gazebo/share/turtlebot3_gazebo//worlds/empty_world.world
+/home/jw/jw/dgtr_ws/install/turtlebot3_gazebo/share/turtlebot3_gazebo//worlds/no_roof_small_warehouse.world
 /home/jw/jw/dgtr_ws/install/turtlebot3_gazebo/share/turtlebot3_gazebo//worlds/turtlebot3_dqn_stage1.world
 /home/jw/jw/dgtr_ws/install/turtlebot3_gazebo/share/turtlebot3_gazebo//worlds/turtlebot3_dqn_stage2.world
 /home/jw/jw/dgtr_ws/install/turtlebot3_gazebo/share/turtlebot3_gazebo//worlds/turtlebot3_dqn_stage3.world

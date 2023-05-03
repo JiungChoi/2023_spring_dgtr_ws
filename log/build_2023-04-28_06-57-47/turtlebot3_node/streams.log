@@ -1,0 +1,42 @@
+[0.038s] Invoking command in '/home/jw/jw/dgtr_ws/build/turtlebot3_node': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/jw/jw/dgtr_ws/install/turtlebot3_teleop:/home/jw/jw/dgtr_ws/install/turtlebot3_example:/opt/ros/humble /usr/bin/cmake --build /home/jw/jw/dgtr_ws/build/turtlebot3_node -- -j8 -l8
+[0.363s] [  7%] [32mBuilding CXX object CMakeFiles/turtlebot3_node_lib.dir/src/devices/reset.cpp.o[0m
+[0.363s] [ 21%] [32mBuilding CXX object CMakeFiles/turtlebot3_node_lib.dir/src/devices/motor_power.cpp.o[0m
+[0.363s] [ 21%] [32mBuilding CXX object CMakeFiles/turtlebot3_node_lib.dir/src/devices/sound.cpp.o[0m
+[0.363s] [ 28%] [32mBuilding CXX object CMakeFiles/turtlebot3_node_lib.dir/src/dynamixel_sdk_wrapper.cpp.o[0m
+[0.363s] [ 35%] [32mBuilding CXX object CMakeFiles/turtlebot3_node_lib.dir/src/odometry.cpp.o[0m
+[0.364s] [ 42%] [32mBuilding CXX object CMakeFiles/turtlebot3_node_lib.dir/src/sensors/battery_state.cpp.o[0m
+[0.364s] [ 50%] [32mBuilding CXX object CMakeFiles/turtlebot3_node_lib.dir/src/turtlebot3.cpp.o[0m
+[0.364s] [ 57%] [32mBuilding CXX object CMakeFiles/turtlebot3_node_lib.dir/src/diff_drive_controller.cpp.o[0m
+[1.010s] [ 64%] [32mBuilding CXX object CMakeFiles/turtlebot3_node_lib.dir/src/sensors/imu.cpp.o[0m
+[7.387s] [ 71%] [32mBuilding CXX object CMakeFiles/turtlebot3_node_lib.dir/src/sensors/joint_state.cpp.o[0m
+[7.580s] [ 78%] [32mBuilding CXX object CMakeFiles/turtlebot3_node_lib.dir/src/sensors/sensor_state.cpp.o[0m
+[20.122s] [ 85%] [32m[1mLinking CXX static library libturtlebot3_node_lib.a[0m
+[20.539s] [ 85%] Built target turtlebot3_node_lib
+[20.558s] [ 92%] [32mBuilding CXX object CMakeFiles/turtlebot3_ros.dir/src/node_main.cpp.o[0m
+[22.881s] [100%] [32m[1mLinking CXX executable turtlebot3_ros[0m
+[24.302s] [100%] Built target turtlebot3_ros
+[24.311s] Invoked command in '/home/jw/jw/dgtr_ws/build/turtlebot3_node' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/jw/jw/dgtr_ws/install/turtlebot3_teleop:/home/jw/jw/dgtr_ws/install/turtlebot3_example:/opt/ros/humble /usr/bin/cmake --build /home/jw/jw/dgtr_ws/build/turtlebot3_node -- -j8 -l8
+[24.342s] Invoking command in '/home/jw/jw/dgtr_ws/build/turtlebot3_node': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/jw/jw/dgtr_ws/install/turtlebot3_teleop:/home/jw/jw/dgtr_ws/install/turtlebot3_example:/opt/ros/humble /usr/bin/cmake --install /home/jw/jw/dgtr_ws/build/turtlebot3_node
+[24.347s] -- Install configuration: ""
+[24.347s] -- Execute custom install script
+[24.347s] -- Up-to-date symlink: /home/jw/jw/dgtr_ws/install/turtlebot3_node/share/turtlebot3_node/param/burger.yaml
+[24.347s] -- Up-to-date symlink: /home/jw/jw/dgtr_ws/install/turtlebot3_node/share/turtlebot3_node/param/waffle.yaml
+[24.348s] -- Up-to-date symlink: /home/jw/jw/dgtr_ws/install/turtlebot3_node/share/turtlebot3_node/param/waffle_pi.yaml
+[24.348s] -- Up-to-date symlink: /home/jw/jw/dgtr_ws/install/turtlebot3_node/lib/turtlebot3_node/turtlebot3_ros
+[24.348s] -- Up-to-date symlink: /home/jw/jw/dgtr_ws/install/turtlebot3_node/share/ament_index/resource_index/package_run_dependencies/turtlebot3_node
+[24.348s] -- Up-to-date symlink: /home/jw/jw/dgtr_ws/install/turtlebot3_node/share/ament_index/resource_index/parent_prefix_path/turtlebot3_node
+[24.348s] -- Up-to-date symlink: /home/jw/jw/dgtr_ws/install/turtlebot3_node/share/turtlebot3_node/environment/ament_prefix_path.sh
+[24.348s] -- Up-to-date symlink: /home/jw/jw/dgtr_ws/install/turtlebot3_node/share/turtlebot3_node/environment/ament_prefix_path.dsv
+[24.348s] -- Up-to-date symlink: /home/jw/jw/dgtr_ws/install/turtlebot3_node/share/turtlebot3_node/environment/path.sh
+[24.349s] -- Up-to-date symlink: /home/jw/jw/dgtr_ws/install/turtlebot3_node/share/turtlebot3_node/environment/path.dsv
+[24.349s] -- Up-to-date symlink: /home/jw/jw/dgtr_ws/install/turtlebot3_node/share/turtlebot3_node/local_setup.bash
+[24.349s] -- Up-to-date symlink: /home/jw/jw/dgtr_ws/install/turtlebot3_node/share/turtlebot3_node/local_setup.sh
+[24.349s] -- Up-to-date symlink: /home/jw/jw/dgtr_ws/install/turtlebot3_node/share/turtlebot3_node/local_setup.zsh
+[24.349s] -- Up-to-date symlink: /home/jw/jw/dgtr_ws/install/turtlebot3_node/share/turtlebot3_node/local_setup.dsv
+[24.349s] -- Symlinking: /home/jw/jw/dgtr_ws/install/turtlebot3_node/share/turtlebot3_node/package.dsv
+[24.354s] -- Up-to-date symlink: /home/jw/jw/dgtr_ws/install/turtlebot3_node/share/ament_index/resource_index/packages/turtlebot3_node
+[24.355s] -- Up-to-date symlink: /home/jw/jw/dgtr_ws/install/turtlebot3_node/share/turtlebot3_node/cmake/ament_cmake_export_include_directories-extras.cmake
+[24.355s] -- Up-to-date symlink: /home/jw/jw/dgtr_ws/install/turtlebot3_node/share/turtlebot3_node/cmake/turtlebot3_nodeConfig.cmake
+[24.355s] -- Up-to-date symlink: /home/jw/jw/dgtr_ws/install/turtlebot3_node/share/turtlebot3_node/cmake/turtlebot3_nodeConfig-version.cmake
+[24.355s] -- Up-to-date symlink: /home/jw/jw/dgtr_ws/install/turtlebot3_node/share/turtlebot3_node/package.xml
+[24.358s] Invoked command in '/home/jw/jw/dgtr_ws/build/turtlebot3_node' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/jw/jw/dgtr_ws/install/turtlebot3_teleop:/home/jw/jw/dgtr_ws/install/turtlebot3_example:/opt/ros/humble /usr/bin/cmake --install /home/jw/jw/dgtr_ws/build/turtlebot3_node
