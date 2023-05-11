@@ -20,7 +20,10 @@ import sys
 import cv2
 import numpy as np
 import matplotlib.pyplot as plt
-from Search_2D import Astar
+from Search_2D.Searched_based import Rtaastar, Astar, D_star
+from Search_2D.Sampling_based import RrtConn, Rrtori, rrt_star_smart, rrtstar, dynamic_rrt
+
+from time import sleep
 
 def create_pose_stamped(navigator : BasicNavigator, position_x, position_y, orientation_z):
     q_x, q_y, q_z, q_w = tf_transformations.quaternion_from_euler(0.0, 0.0, orientation_z)
@@ -88,15 +91,15 @@ def followPoints():
     rclpy.shutdown()
 
 def make2Dcostmap(map):
-    SCALE_FACTOR = 1
-
     sizeX, sizeY = map.metadata.size_x, map.metadata.size_y
     map = map.data.tolist()
     map = np.array(map)
     map = np.reshape(map, (sizeY, sizeX)).astype('uint8')
-    map = cv2.resize(map, (sizeY*SCALE_FACTOR, sizeX*SCALE_FACTOR))
+    map = cv2.resize(map, (int(sizeY*SCALE_FACTOR), int(sizeX*SCALE_FACTOR)))
     map = np.transpose(map)
     map = cv2.rotate(map, cv2.ROTATE_180)
+    print("MAP_SIZE : ", sizeX, sizeY)
+    print("The number of fixel : ", sizeX*sizeY)
     return map
     
 def plotCostmap(map, title):
@@ -122,6 +125,21 @@ def mapLoader(nav : BasicNavigator):
 
     return binGlobalMap
 
+def rtPathplanner():
+    rclpy.init()
+    nav = BasicNavigator()
+
+    '''
+    binGlobalMap = mapLoader(nav)
+    custom_path = runAstar(x_start, x_goal)
+    '''
+    print(nav.get_parameters)
+
+    # Wait for Nav2 && Shut down
+    nav.waitUntilNav2Active()
+    rclpy.shutdown()
+
+## Searched based path planner
 def runAstar(s_start, s_goal):
     rclpy.init()
     nav = BasicNavigator()
@@ -135,9 +153,106 @@ def runAstar(s_start, s_goal):
     nav.waitUntilNav2Active()
     rclpy.shutdown()
 
+def runDstar(s_start, s_goal):
+    rclpy.init()
+    nav = BasicNavigator()
+
+    binGlobalMap = mapLoader(nav)
+    
+    dstar = D_star.DStar(s_start, s_goal, binGlobalMap)
+    dstar.run()
+
+    # Wait for Nav2 && Shut down
+    nav.waitUntilNav2Active()
+    rclpy.shutdown()
+
+def rtaAstar(s_start, s_goal):
+    rclpy.init()
+    nav = BasicNavigator()
+
+    binGlobalMap = mapLoader(nav)
+    
+    rtaa = Rtaastar.RTAAStar(s_start, s_goal, 240, "euclidean", binGlobalMap)
+    rtaa.run()
+
+    # Wait for Nav2 && Shut down
+    nav.waitUntilNav2Active()
+    rclpy.shutdown()
+
+
+## Sampling based path planner
+def rrt(s_start, s_goal):
+    rclpy.init()
+    nav = BasicNavigator()
+
+    binGlobalMap = mapLoader(nav)
+    
+    rrt = Rrtori.Rrt(s_start, s_goal, 0.5, 0.05, 1000, binGlobalMap)
+    rrt.run()
+
+    # Wait for Nav2 && Shut down
+    nav.waitUntilNav2Active()
+    rclpy.shutdown()
+    
+def rrtConn(s_start, s_goal):
+    rclpy.init()
+    nav = BasicNavigator()
+
+    binGlobalMap = mapLoader(nav)
+    
+    rrt_conn = RrtConn.RrtConnect(s_start, s_goal, 0.8, 0.05, 1000, binGlobalMap)
+    rrt_conn.run()
+
+    # Wait for Nav2 && Shut down
+    nav.waitUntilNav2Active()
+    rclpy.shutdown()
+
+def rrtSmart(s_start, s_goal):
+    rclpy.init()
+    nav = BasicNavigator()
+
+    binGlobalMap = mapLoader(nav)
+
+    rrt_smart = rrt_star_smart.RrtStarSmart(s_start, s_goal, 1.5, 0.10, 0, 100, binGlobalMap)
+    rrt_smart.run()
+
+    # Wait for Nav2 && Shut down
+    nav.waitUntilNav2Active()
+    rclpy.shutdown()
+
+def rrtStar(s_start, s_goal):
+    rclpy.init()
+    nav = BasicNavigator()
+
+    binGlobalMap = mapLoader(nav)
+
+    rrt_star = rrtstar.RrtStar(s_start, s_goal, 10, 0.10, 20, 1000, binGlobalMap)
+    rrt_star.run()
+    # Wait for Nav2 && Shut down
+    nav.waitUntilNav2Active()
+    rclpy.shutdown()
+
+def drrt(s_start, s_goal):
+    rclpy.init()
+    nav = BasicNavigator()
+
+    binGlobalMap = mapLoader(nav)
+
+    drrt = dynamic_rrt.DynamicRrt(s_start, s_goal, 0.5, 0.1, 0.6, 50000, binGlobalMap)
+    drrt.run()
+    
+    # Wait for Nav2 && Shut down
+    nav.waitUntilNav2Active()
+    rclpy.shutdown()
+
+
+
 if __name__ == '__main__':
+    SCALE_FACTOR = 1
+
     if len(sys.argv) == 1:
         print("하나 이상의 옵션을 입력해주세요.:\n\n init: 초기화 , go: x y 값으로 이동 , waypoint: waypoint 사용해서 이동")
+        rtPathplanner()
         exit()
 
     if sys.argv[1] == 'init':
@@ -149,7 +264,30 @@ if __name__ == '__main__':
     elif sys.argv[1] == 'waypoint':
         followPoints()
     
+    elif sys.argv[1] == 'rtpath':
+        rtPathplanner()
+    
     elif sys.argv[1] == 'run_astar':
         runAstar(sys.argv[2], sys.argv[3])
-    
 
+    elif sys.argv[1] == 'run_rtaastar':
+        rtaAstar(sys.argv[2], sys.argv[3])
+
+    elif sys.argv[1] == 'run_dstar':
+        runDstar(sys.argv[2], sys.argv[3])
+
+    elif sys.argv[1] == 'run_rrt':
+        rrt(sys.argv[2], sys.argv[3])
+
+    elif sys.argv[1] == 'run_rrtconn':
+        rrtConn(sys.argv[2], sys.argv[3])
+
+    elif sys.argv[1] == 'run_rrtsmart':
+        rrtSmart(sys.argv[2], sys.argv[3])
+
+    elif sys.argv[1] == 'run_rrtstar':
+        rrtStar(sys.argv[2], sys.argv[3])
+
+    elif sys.argv[1] == 'run_drrt':
+        drrt(sys.argv[2], sys.argv[3])
+    

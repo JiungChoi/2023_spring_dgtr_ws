@@ -3,18 +3,20 @@ import sys
 import math
 import heapq
 
+from Search_2D.Searched_based import env, plotting
+
 sys.path.append(os.path.dirname(os.path.abspath(__file__)) +
                 "/../../Search_based_Planning/")
 
-from Search_2D import plotting, env
 
 
 class AStar:
     """AStar set the cost + heuristics as the priority
     """
     def __init__(self, s_start, s_goal, heuristic_type, cost_map):
-        self.s_start = (160, 95)
-        self.s_goal = (120,  100)
+        self.s_start = (47,  28)
+        self.s_goal = (250,  210)
+
         self.heuristic_type = heuristic_type
         self.cost_map = cost_map
 
@@ -60,7 +62,8 @@ class AStar:
 
         return self.extract_path(self.PARENT), self.CLOSED
 
-    def searching_repeated_astar(self, e):
+    def searching_repeated_astar(self, 
+    ):
         """
         repeated A*.
         :param e: weight of A*

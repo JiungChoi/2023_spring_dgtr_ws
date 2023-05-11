@@ -3,7 +3,10 @@ class Env:
         self.motions = [(-1, 0), (-1, 1), (0, 1), (1, 1),
                         (1, 0), (1, -1), (0, -1), (-1, -1)]
         self.cost_map = cost_map
+        self.y_range, self.x_range = self.cost_map.shape
         self.obs = self.obs_map()
+        
+        
 
     def update_obs(self, obs):
         self.obs = obs
@@ -15,10 +18,8 @@ class Env:
         """
 
         obs = set()
-        size_y, size_x = self.cost_map.shape
-
-        for i in range(size_y):
-            for j in range(size_x):
+        for i in range(self.y_range):
+            for j in range(self.x_range):
                 if self.cost_map[i][j] == 255: 
                     obs.add((j, i))
 

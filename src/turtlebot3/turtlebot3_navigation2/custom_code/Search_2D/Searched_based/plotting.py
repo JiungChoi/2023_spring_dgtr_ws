@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 sys.path.append(os.path.dirname(os.path.abspath(__file__)) +
                 "/../../Search_based_Planning/")
 
-import Search_2D.env as env
+import Search_2D.Searched_based.env as env
 
 
 class Plotting:
