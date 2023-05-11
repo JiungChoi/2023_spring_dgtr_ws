@@ -187,7 +187,7 @@ def rrt(s_start, s_goal):
 
     binGlobalMap = mapLoader(nav)
     
-    rrt = Rrtori.Rrt(s_start, s_goal, 0.5, 0.05, 1000, binGlobalMap)
+    rrt = Rrtori.Rrt(s_start, s_goal, 0.5, 0.05, 500000, binGlobalMap)
     rrt.run()
 
     # Wait for Nav2 && Shut down
@@ -213,7 +213,7 @@ def rrtSmart(s_start, s_goal):
 
     binGlobalMap = mapLoader(nav)
 
-    rrt_smart = rrt_star_smart.RrtStarSmart(s_start, s_goal, 1.5, 0.10, 0, 100, binGlobalMap)
+    rrt_smart = rrt_star_smart.RrtStarSmart(s_start, s_goal, 1.5, 0.10, 2, 1000, binGlobalMap)
     rrt_smart.run()
 
     # Wait for Nav2 && Shut down
@@ -226,7 +226,7 @@ def rrtStar(s_start, s_goal):
 
     binGlobalMap = mapLoader(nav)
 
-    rrt_star = rrtstar.RrtStar(s_start, s_goal, 10, 0.10, 20, 1000, binGlobalMap)
+    rrt_star = rrtstar.RrtStar(s_start, s_goal, 10, 0.10, 20, 10000, binGlobalMap)
     rrt_star.run()
     # Wait for Nav2 && Shut down
     nav.waitUntilNav2Active()
@@ -248,7 +248,7 @@ def drrt(s_start, s_goal):
 
 
 if __name__ == '__main__':
-    SCALE_FACTOR = 1
+    SCALE_FACTOR = 0.3 # 0.3
 
     if len(sys.argv) == 1:
         print("하나 이상의 옵션을 입력해주세요.:\n\n init: 초기화 , go: x y 값으로 이동 , waypoint: waypoint 사용해서 이동")
