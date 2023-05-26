@@ -7,6 +7,7 @@ import os
 import sys
 import math
 import matplotlib.pyplot as plt
+from custom_run import nav2img
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)) +
                 "/../../Search_based_Planning/")
@@ -16,8 +17,12 @@ from Search_2D.Searched_based import plotting, env
 
 class DStar:
     def __init__(self, s_start, s_goal, cost_map):
-        self.s_start = (47,  28)
-        self.s_goal = (250,  210)
+
+        self.s_start = nav2img(s_start, (cost_map.shape[1], cost_map.shape[0]))
+        self.s_goal = nav2img(s_goal, (cost_map.shape[1], cost_map.shape[0]))
+
+        self.s_start = (0, 0)
+
 
         self.Env = env.Env(cost_map)
         self.Plot = plotting.Plotting(self.s_start, self.s_goal, cost_map)
@@ -45,7 +50,6 @@ class DStar:
                 self.k[(i, j)] = 0.0
                 self.h[(i, j)] = float("inf")
                 self.PARENT[(i, j)] = None
-
         self.h[self.s_goal] = 0.0
 
     def on_press(self, event):
@@ -291,5 +295,7 @@ class DStar:
         self.Plot.plot_grid("Dynamic A* (D*)")
         self.plot_path(self.path)
         self.fig.canvas.mpl_connect('button_press_event', self.on_press)
+    
         plt.show()
+        return self.path
         

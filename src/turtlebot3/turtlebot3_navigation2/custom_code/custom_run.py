@@ -9,12 +9,16 @@
     Setting goal pose    : 23.04.28
     Add Costmap Genertor : 23.05.01
     Add Pathplanner      : 23.05.02
+    Add ThrawPath        : 23.05.
+    Config PF Framework  : 23.05.12
 
 '''
 
 import rclpy
-from nav2_simple_commander.robot_navigator import BasicNavigator
+from nav2_simple_commander.robot_navigator import BasicNavigator, TaskResult
 from geometry_msgs.msg import PoseStamped
+from std_msgs.msg import Header
+from nav_msgs.msg import Path
 import tf_transformations
 import sys
 import cv2
@@ -24,6 +28,13 @@ from Search_2D.Searched_based import Rtaastar, Astar, D_star
 from Search_2D.Sampling_based import RrtConn, Rrtori, rrt_star_smart, rrtstar, dynamic_rrt
 
 from time import sleep
+
+SCALE_FACTOR = 3 # 이미지 맵을 스케일링 할 비율
+NAV2_MAP_ORIGIN_X = 6
+NAV2_MAP_ORIGIN_Y = 5
+NAV2_MAP_SIZE_X = 16
+NAV2_MAP_SIZE_Y = 11
+THETA = 0
 
 def create_pose_stamped(navigator : BasicNavigator, position_x, position_y, orientation_z):
     q_x, q_y, q_z, q_w = tf_transformations.quaternion_from_euler(0.0, 0.0, orientation_z)
@@ -97,7 +108,8 @@ def make2Dcostmap(map):
     map = np.reshape(map, (sizeY, sizeX)).astype('uint8')
     map = cv2.resize(map, (int(sizeY*SCALE_FACTOR), int(sizeX*SCALE_FACTOR)))
     map = np.transpose(map)
-    map = cv2.rotate(map, cv2.ROTATE_180)
+    map = cv2.flip(map, 1)
+    map = cv2.rotate(map, cv2.ROTATE_90_COUNTERCLOCKWISE)
     print("MAP_SIZE : ", sizeX, sizeY)
     print("The number of fixel : ", sizeX*sizeY)
     return map
@@ -121,19 +133,166 @@ def mapLoader(nav : BasicNavigator):
     plotCostmap(globalMap, 'GlobalMap')
     plotCostmap(binGlobalMap, 'binaryGlobalMap')
 
-    plt.show()    
+    plt.show()
 
     return binGlobalMap
+
+## -- nav2 map coord -> Img map coord
+def nav2img(coord, cost_map_shape):
+    return transformer([(coord.x, coord.y)], cost_map_shape, 0)
+
+## -- Img map path <-> nav2 map path 
+#       if type == 0  : nav2_map -> img_map
+#       else type == 1 : img_map -> nav2_map
+def transformer(path, cost_map_shape, type):
+    cost_map_w, cost_map_h = cost_map_shape
+
+    print("Init Path: ", path)
+    ## -- Convert path for affine transform
+    path = np.transpose(path)
+    _, n = path.shape # the number of point in path
+
+    ones = np.ones((1, n))
+    path = np.vstack([path, ones])
+    '''
+    plt.plot(path[0,:],path[1,:], color='darkmagenta', marker='o', linestyle='solid')
+    print("Image Map: \n", path, path.shape)
+    '''
+
+    ## -- Set parameter for affine trasnform
+    dx = NAV2_MAP_ORIGIN_X/NAV2_MAP_SIZE_X*cost_map_w
+    dy = NAV2_MAP_ORIGIN_Y/NAV2_MAP_SIZE_Y*cost_map_h
+    sx = NAV2_MAP_SIZE_X/cost_map_w #90도 회전하기 전이라 y축에 대한 스케일링을 해야함
+    sy = NAV2_MAP_SIZE_Y/cost_map_h #90도 회전하기 전이라 x축에 대한 스케일링을 해야함
+    
+
+    ## -- Make Matrix for affine trans
+    R = np.array([[ np.cos(THETA), -np.sin(THETA),  0], # Rotation
+                  [ np.sin(THETA),  np.cos(THETA),  0],
+                  [      0       ,       0       ,  1] ])
+    
+    T = np.array([[ 1, 0,  -dx], # Translation
+                  [ 0, 1,  -dy],
+                  [ 0, 0,  1] ])
+
+    S = np.array([[sx,0 ,  0],  # Scaling
+                  [0 ,sy,  0],
+                  [0 ,0 ,  1] ])
+    
+    
+    ## -- Circlur Matrix
+    if type :
+        path = S@T@R@path
+
+        '''
+        path = R@path
+        print("R: ", R, R.shape)
+        print("Rotate: \n", path, path.shape)
+        plt.plot(path[0,:],path[1,:], color='b', marker='o', linestyle='solid')
+        
+        path = T@path
+        print("T: ", T, T.shape)
+        print("Translation: \n", path, path.shape)
+        plt.plot(path[0,:],path[1,:], color='g', marker='o', linestyle='solid')
+
+
+        path = S@path
+        print("S: ", S, S.shape)
+        print("Scaling: \n", path, path.shape)
+        plt.plot(path[0,:],path[1,:], color='r', marker='o', linestyle='solid')
+        
+        
+        plt.axis([-60, 60, -60, 60])
+        plt.grid(True)
+        plt.show()
+        '''
+
+        print("Converted Path (img map path -> nav2): ", path)
+        return path
+    
+    else:
+        path = np.linalg.inv(S@T@R)@path
+        path = (int(path[0]), int(path[1]))
+        print("Converted coord(nav2 -> img map): ", path)
+        return path
+    
+    
 
 def rtPathplanner():
     rclpy.init()
     nav = BasicNavigator()
+    
+    while(True):
+        goal_point = input("목표 위치를 입력해 주세요. (종료: -1) : ")
+        if goal_point == "-1":
+            break
+        else :
+            goal_point.replace(" ", "")
+            goal_point = goal_point.split(",")
+            goal_point = list(map(int, goal_point))
+            
+            # Set our demo's initial pose
+            initial_pose = create_pose_stamped(nav, nav.now_position.pose.position.x, nav.now_position.pose.position.y, 0.0)
+            nav.setInitialPose(initial_pose)
 
-    '''
-    binGlobalMap = mapLoader(nav)
-    custom_path = runAstar(x_start, x_goal)
-    '''
-    print(nav.get_parameters)
+            # Wait for navigation to fully activate, since autostarting nav2
+            nav.waitUntilNav2Active()
+
+            # Go to our demos first goal pose
+            goal_pose = create_pose_stamped(nav, float(goal_point[0]), float(goal_point[1]), 0.0)
+
+            binGlobalMap = mapLoader(nav)
+            dstar = D_star.DStar(initial_pose.pose.position, goal_pose.pose.position, binGlobalMap)
+            custom_path = dstar.run()
+
+            # Convert nav2 map path from img map path            
+            transformer(custom_path, (binGlobalMap.shape[1], binGlobalMap.shape[0]), 1)
+
+
+            '''
+            # Get the path, smooth it
+            path = nav.getPath(initial_pose, goal_pose)
+            print(path)
+
+            print("hehe", type(path))
+            
+            #path = nav.smoothPath(path)
+            '''
+
+            # Follow path
+            nav.followPath(custom_path)
+            
+            i = 0
+            while not nav.isTaskComplete():
+                ################################################
+                #
+                # Implement some code here for your application!
+                #
+                ################################################
+
+                # Do something with the feedback
+                i += 1
+                feedback = nav.getFeedback()
+                if feedback and i % 5 == 0:
+                    print('Estimated distance remaining to goal position: ' +
+                        '{0:.3f}'.format(feedback.distance_to_goal) +
+                        '\nCurrent speed of the robot: ' +
+                        '{0:.3f}'.format(feedback.speed))
+            
+
+            # Do something depending on the return code
+            result = nav.getResult()
+            if result == TaskResult.SUCCEEDED:
+                print('Goal succeeded!')
+                nav.now_position = goal_pose
+            elif result == TaskResult.CANCELED:
+                print('Goal was canceled!')
+            elif result == TaskResult.FAILED:
+                print('Goal failed!')
+            else:
+                print('Goal has an invalid return status!')
+
+
 
     # Wait for Nav2 && Shut down
     nav.waitUntilNav2Active()
@@ -147,11 +306,13 @@ def runAstar(s_start, s_goal):
     binGlobalMap = mapLoader(nav)
     
     astar = Astar.AStar(s_start, s_goal, "euclidean", binGlobalMap)
-    astar.run()
+    path = astar.run()
 
     # Wait for Nav2 && Shut down
     nav.waitUntilNav2Active()
     rclpy.shutdown()
+
+    return path
 
 def runDstar(s_start, s_goal):
     rclpy.init()
@@ -160,11 +321,12 @@ def runDstar(s_start, s_goal):
     binGlobalMap = mapLoader(nav)
     
     dstar = D_star.DStar(s_start, s_goal, binGlobalMap)
-    dstar.run()
+    path = dstar.run()
 
     # Wait for Nav2 && Shut down
     nav.waitUntilNav2Active()
     rclpy.shutdown()
+    return path
 
 def rtaAstar(s_start, s_goal):
     rclpy.init()
@@ -248,11 +410,10 @@ def drrt(s_start, s_goal):
 
 
 if __name__ == '__main__':
-    SCALE_FACTOR = 0.3 # 0.3
+    
 
     if len(sys.argv) == 1:
         print("하나 이상의 옵션을 입력해주세요.:\n\n init: 초기화 , go: x y 값으로 이동 , waypoint: waypoint 사용해서 이동")
-        rtPathplanner()
         exit()
 
     if sys.argv[1] == 'init':
@@ -290,4 +451,5 @@ if __name__ == '__main__':
 
     elif sys.argv[1] == 'run_drrt':
         drrt(sys.argv[2], sys.argv[3])
+    
     

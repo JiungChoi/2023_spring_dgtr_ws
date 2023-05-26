@@ -212,3 +212,5 @@ class AStar:
         plot = plotting.Plotting(self.s_start, self.s_goal, self.cost_map)
         path, visited = self.searching()
         plot.animation(path, visited, "A*")  # animation
+
+        return path
