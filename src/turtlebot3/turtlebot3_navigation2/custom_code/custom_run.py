@@ -29,17 +29,17 @@ from Search_2D.Sampling_based import RrtConn, Rrtori, rrt_star_smart, rrtstar, d
 
 from time import sleep
 
-SCALE_FACTOR = 3 # 이미지 맵을 스케일링 할 비율
+SCALE_FACTOR = 1 # 이미지 맵을 스케일링 할 비율
 NAV2_MAP_ORIGIN_X = 6
 NAV2_MAP_ORIGIN_Y = 5
 NAV2_MAP_SIZE_X = 16
 NAV2_MAP_SIZE_Y = 11
 THETA = 0
 
-def create_pose_stamped(navigator : BasicNavigator, position_x, position_y, orientation_z):
+def create_pose_stamped(navigator : BasicNavigator, position_x, position_y, orientation_z, frame_id = 'map'):
     q_x, q_y, q_z, q_w = tf_transformations.quaternion_from_euler(0.0, 0.0, orientation_z)
     pose = PoseStamped()
-    pose.header.frame_id = 'map'
+    pose.header.frame_id = frame_id
     pose.header.stamp = navigator.get_clock().now().to_msg()
     pose.pose.position.x = position_x
     pose.pose.position.y = position_y
@@ -180,8 +180,10 @@ def transformer(path, cost_map_shape, type):
                   [0 ,0 ,  1] ])
     
     
-    ## -- Circlur Matrix
-    if type :
+    ## -- Circ Matrix
+    # type == True : img map path -> nav2
+    # type != True : nav2 coord -> img map coord
+    if type : 
         path = S@T@R@path
 
         '''
@@ -207,16 +209,29 @@ def transformer(path, cost_map_shape, type):
         plt.show()
         '''
 
-        print("Converted Path (img map path -> nav2): ", path)
-        return path
+        print(f"Converted Path (img map path -> nav2) {path.shape}, {len(path[0,:])}: \n{path[:2,:]} ", end="\n")
+        return path[:2,:]
     
     else:
         path = np.linalg.inv(S@T@R)@path
         path = (int(path[0]), int(path[1]))
-        print("Converted coord(nav2 -> img map): ", path)
+        print("Converted coord(nav2 -> img map): ", path, end="\n")
         return path
     
+def create_path_topic(navigator : BasicNavigator, path):
     
+    pathTopic = Path()
+    pathTopic.header.stamp = navigator.get_clock().now().to_msg()
+    pathTopic.header.frame_id = 'map'
+    
+    
+    h, w = path.shape
+    for i in range(w):
+        pathTopic.poses.append(create_pose_stamped(navigator, path[0][i], path[1][i], 0, frame_id=''))
+
+    return pathTopic
+
+
 
 def rtPathplanner():
     rclpy.init()
@@ -229,8 +244,9 @@ def rtPathplanner():
         else :
             goal_point.replace(" ", "")
             goal_point = goal_point.split(",")
-            goal_point = list(map(int, goal_point))
+            goal_point = list(map(float, goal_point))
             
+            # -- 시작, 도착 위치 포지셔닝 
             # Set our demo's initial pose
             initial_pose = create_pose_stamped(nav, nav.now_position.pose.position.x, nav.now_position.pose.position.y, 0.0)
             nav.setInitialPose(initial_pose)
@@ -241,27 +257,38 @@ def rtPathplanner():
             # Go to our demos first goal pose
             goal_pose = create_pose_stamped(nav, float(goal_point[0]), float(goal_point[1]), 0.0)
 
+            # -- 맵 로드
             binGlobalMap = mapLoader(nav)
-            dstar = D_star.DStar(initial_pose.pose.position, goal_pose.pose.position, binGlobalMap)
+
+
+            # -- 경로생성
+            s_start = nav2img(initial_pose.pose.position, (binGlobalMap.shape[1], binGlobalMap.shape[0]))
+            s_goal = nav2img(goal_pose.pose.position, (binGlobalMap.shape[1], binGlobalMap.shape[0]))
+
+            dstar = D_star.DStar(s_start, s_goal, binGlobalMap)
             custom_path = dstar.run()
 
+            # -- 커스텀 알고리즘 경로
             # Convert nav2 map path from img map path            
-            transformer(custom_path, (binGlobalMap.shape[1], binGlobalMap.shape[0]), 1)
+            custom_path = transformer(custom_path, (binGlobalMap.shape[1], binGlobalMap.shape[0]), 1)
 
+            # Topic for Generating nav2 Path class
+            custom_path = create_path_topic(nav, custom_path)
+            print(f"Custom Path({type(custom_path)}) : \n{custom_path}")
 
-            '''
-            # Get the path, smooth it
+            # -- Nav2 내장 알고리즘 경로
+            # Get the path, 
             path = nav.getPath(initial_pose, goal_pose)
-            print(path)
-
-            print("hehe", type(path))
+            print(f"Nav2 Built in Path({type(path)}) : \n{path}")
             
-            #path = nav.smoothPath(path)
-            '''
+            # # -- 경로 스무딩
+            # path = nav.smoothPath(path)
 
-            # Follow path
-            nav.followPath(custom_path)
+            # -- 실행
+            nav.followPath(path)
             
+
+            # -- 모니터링
             i = 0
             while not nav.isTaskComplete():
                 ################################################
@@ -279,7 +306,8 @@ def rtPathplanner():
                         '\nCurrent speed of the robot: ' +
                         '{0:.3f}'.format(feedback.speed))
             
-
+            
+            # -- 결과 출력
             # Do something depending on the return code
             result = nav.getResult()
             if result == TaskResult.SUCCEEDED:

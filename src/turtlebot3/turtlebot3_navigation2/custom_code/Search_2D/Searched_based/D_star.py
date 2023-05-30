@@ -18,11 +18,14 @@ from Search_2D.Searched_based import plotting, env
 class DStar:
     def __init__(self, s_start, s_goal, cost_map):
 
-        self.s_start = nav2img(s_start, (cost_map.shape[1], cost_map.shape[0]))
-        self.s_goal = nav2img(s_goal, (cost_map.shape[1], cost_map.shape[0]))
+        self.s_start = s_start
 
-        self.s_start = (0, 0)
+        self.s_goal = s_goal
 
+        # FIXME 원점이 장애물 위에 있어 보정하는 코드 : 향후 수정 필요 -- 아래로 3줄
+        self.s_start = list(self.s_start)
+        self.s_start[1] = self.s_start[1] - 20
+        self.s_start = tuple(self.s_start)
 
         self.Env = env.Env(cost_map)
         self.Plot = plotting.Plotting(self.s_start, self.s_goal, cost_map)
@@ -94,7 +97,7 @@ class DStar:
     def process_state(self):
         s = self.min_state()  # get node in OPEN set with min k value
         self.visited.add(s)
-
+        
         if s is None:
             return -1  # OPEN set is empty
 
